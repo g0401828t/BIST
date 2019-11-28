@@ -1,0 +1,88 @@
+<html>
+
+<head>
+  <!-- Load TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.2"></script>
+  <!-- Load BodyPix -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0"></script>
+</head>
+
+<body>
+  <canvas id='canvas'></canvas>
+  <img id='image' src='/imgs' crossorigin='anonymous' />
+  <!-- <img id='image' src='https://github.com/tensorflow/tfjs-models/raw/master/body-pix/images/toMultiPersonColoredPartImage.jpg' crossorigin='anonymous'/> -->
+  <!-- <img id='image' src='data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxITEBMTEhMWFhUSEhcbGBIXFxMVGBIYGBoXFxUXFRUYHiggGhslHRcaITEhJSkrLi4uGR8zODMtNygtLisBCgoKDg0OGxAQGSslHiUrLS0rLy0rLS03LS0tKy4tNy0tKy0tLTcrLSstLS4tLS0rLS0rLS0tLS01LS0tLy0tLf/AABEIAOAA4QMBIgACEQEDEQH/xAAcAAEAAQUBAQAAAAAAAAAAAAAABwMEBQYIAgH/xABFEAACAQICBQkEBggFBQEAAAAAAQIDEQQhBQcSMVEGEyJBYXGBkbEjUqHBMkKCwtHwFCVTcnSSk7IkNVRi4TRDRKLTFf/EABkBAQADAQEAAAAAAAAAAAAAAAABAgQDBf/EACARAQACAwACAwEBAAAAAAAAAAABAgMRMQQSISJBYTL/2gAMAwEAAhEDEQA/AJpAAAAAAAAAAAAAAAAANe5VcraOCSi+nVkrxop2y3Jzl9Vb7dbtu32iZ0mI3xsIIpoa0cXnOWEhOkt/NuopRXbJ3V/BfhvvJjlHRxtLbp3jKP06M7KdN9qW9PqayIi8TxM0mOsyACyoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ9SlSq6SxlbEqMrYmdOCk7pKDcbKLydoxiTCRzidGUKWNxMJWjzsnVe0lZqSe088mrxfkcM8/Vo8aN2bBhMTRqUrxs4Rt0dndwsixwUYw0jh50o2VaFWE8nHdFTi7Ptj6GHwtHBTk8obakoQbpyS2WpXUZKySalfKW+3BGyaE0ZFYpTi17Ki1ZJ5bbtHe+EZHKkxNoactZis7bQADY84AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIy1sOdDEYbEw+tTlTkt+UZbSy7eckn3IkbEYuEFdvwWb7rGn6Uw/6VVbrRvC2yob1BpvNPrb2lfuRzy13Sfh1wTq8fLQsLy0cnNThBxcWlG2UcrZdpKPITCzjhnVqpqeJm6jT3xi8oR7Ms7dW1YxNPkrgqaVRUYpxzbsurPxM9oLSMLOi6idSnnKO0pSp7d5RjJLNLOy7F2HDBj+22nyMm6aZsHxO+4+mthAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHitVUYuUt0U2/AxDx05tq+yrrJdqurscp672I01/3Lt90V+L+Bh9GYtSmovJzp3z96m4wfxdvJ9aLVhC6xNCo3lUkrdVoSTXir/Etng6ylJ06qkpNNwqxtstW+jKFrLLNNPvXXlKU+P57D7KHDetxYWTpVKtNKo1HNpwi9pPNpdJpO2V+reW8eTdJVVWpt063XUj9dPNxktzj+Ce8yVBrZi+xFeI1rhuZ6906ko9f4F/hq20u1bzGzeR60RXu+yV7eH5ZEwMsACiQAAAAAAAAAAAAAAAAAAAAAAAAAAapp+t/iuylGCfdJ3fqjGYu1PEU8l0pu3e4tyt2+yiX2kbPFV1LJStHw2I5p7smYTTFR8/Qi7O83LLjzVTa2ex2T8zpHENrbvZ9zKhZ4GptRtf/kulLMDzTVoruRUpL4v55fApRWSs+pW/PcVab9X6sDxi3anJ2v0Xlxy3eJUwKtsdjSvx6mW2lK2zSlLgsu9tKPxaKuFl9C1/pR47rrNj8GfABzSAAAAAAAAAAAAAAAAAAAAAAAAHyadnZ2dsnvs+p2PoQGmYTnIbaqRu6cmpTg9pO29pZS39jNS5XYmLr0Z0rOdOpGaa3NWkpXz672fXZs3DRtdyc5P605Pzk2WvLDCXpYe1lZSl4yafzOWHLN9xLvlxRXS40eoVIRnDai2r2v8ARfWs8nnxL+i3lezz38fB7jAaBqKKcZO2eXZ2GepXy7t/E0Q4SqUbbK7MvJ2+R7ksynhslbtfqyvLMlDBcq41OZi4KTSrRc7XezBKTvJcNpJ+CL3DVamxeMFkslKVnuutydjK4altqrH3qez/ADJow2jazlD7PyM+bJavGjDjrbrbKd7K++yv39Z6KdCV4RfGKfmiodIcJAAAAAAAAAAAAAAAAAAAAAAAAAgANE0LPoyXut5F9p+tB1o4eXVQj53eXwRY6Mi1Xqw4V5/CbRjeUDax8nK99tpSvG2WaWXBNb+oy+LGttfk/i9pYBR+sZbDS2Ul1dpicPNu21FpXttJr0/PyL6hkm+12/E3Ma9w0sl4u/VveRcxnfvMfoWV6EOvOf8AfIu5wzuuGfy/PaBfaMl7SS4x9H/yYONNwrVY+7Ul5PpR+DRmdELpyfZ8yy0lQf6TUat0qcH374/dMvkx8NPjT9phnMC/ZU/3I+iK5RwStSp/uR9EVjrXkOFuyAAlAAAAAAAAAAAAAAAAAAAAAAAADUHRcMXW7Z7S+10vvGn8ruUCo6SqwntwhONOak0pxu4pS6KtK14tXV3dPKxuGla/N4yW0spOD74tRjddzyI+1lTdSnTqSVp0cVXouzveL6dK9v8AZFNfvMz4Pi8x/WzNXeOLfxs+jdKc7H2c6VRcIzd13q3yMtTneMrxcZfnc+shCNFOmrpPc8+p3yPdCtUTSjVqxzVlGpUj6M3erB7Jw0NFrD0135/bkX7lkQBLGV017eqru2VWpl5S43Mvh9IYpKyxld9jr1X8dq4isyTbSZ9EaRpPEukpx29hvYutq3Rd7cO0tNKyrSqVp0+kpQUYJOzjZxvJXVr/AErZ9aI25GY509J027vnFUi3vd5Qk9pt787O/eSrQpygnCTvZvNZZN3S8L28DN5G6zqGnx6xaJmWW0XGaoUlV+nzcdrdvtmssvIujzS+iu5eh6Lw4yAAAAAAAAAAAAAAAAAAAAAAAAAACx0poqnXjaad1uknZq/quwg3WFXh+kzo3qbdGezN7qdVRj7ObjtfTSk1e252vkdAHNnLatzmlMY1/qZr+R7D/tFaR7e36tOS0V9fxaxmlBK/Uy2pwlKTjTi5TaezGKu5PPcl4s+VoZM3HU9guc0nGpbKhRqSvwlJc2r96nLyNEzqHGIaLGfQVmnnczeCldJ9n4WKHLfRX6Lj8RQjFxhGremupQmlOCj2JSt4FvhsS1khSyLQ3HkFSlLSlFxSk4wrS2Xkm+bkop/aaJZ0ZgarblWTjnfZvFuTeb3bln+d5GeqeDlpJv3cNUfdeVOP3iZjjmpE327Ysk1rqAAFUAAAAAAAAAAAAAAAAAAAAAAAAAAAHNfKajbSmMW//F1n5zk/mdKHOXKyP61xrt/5NT1/LL06rZiKrJP1E4ToYurxnTgvsqU5f3xIvxLJ01TYDmtF021Z15zqPxezH/1hF+Je/EVabr5w0VWwdRLpzhVjKXFQcHDyc5eZGuGld+JLWvuHsMJK26tUV+tXgn91eREOEeaRWqZS9qdorn8VP3KVON/3m39wlM0LVBQSw1efXKulfioU4W+Mn5m+kZP9FeAAKLAAAAAAAAAAAAAAAAAAAAAAAAAAAEAaxKkXpfF7KSs4Xt9aSpQ2n33y8DoBHLmlq1SVarUnfarVZzbf+6Tlb4l6dVstKs8zp/QWD5nC4el+zoU4+MYpO/ic88h8FGtpHC0pq8ZVouS95RTnZ9nR8rnShOSSqNde+HbwOHmvqYtX7pU6i9UiF8C+mu86I1oYSNTROK2vqQU4vhKEk4+D3dzOcW2nkRVMuhdU/wD0EnxxE/7aZuZF2pflJSlTng5XVVzlUjdZSjswUknxVr24PsZKJF+leAAKpAAAAAAAAAAAAAAAAAAAAAAAAAAB9RzFpXFqpUm4pKPOTaS6k27I6U0hiFTo1aj3U6c5P7MXL5HKcZtS8czpRWzcNVuGctLYa26DqSfcqc/m0dCEAapU/wD9ajbqhVv3c3L52J/IydK8a/rB/wAqx38LU87ZfE5smvmdJ6wF+qsd/C1H4qLaOa5y9CaEt41PYfa0pBrdSp1JPxjses0T4QHqZxGxpOEf2lKpHyW39wnwi/UwAAokAAAAAAAAAAAAAAAAAAAAAAAAAAGu6xK+xorGv3sPKH9T2f3jm2W/xJ410Y+NPRjg3nXrU4pcdl8433LYXmiA3VOleKy3/U7TvpWL92hVfwjHP+YnkgnUo/1m3xwlTw6VL8CdiL9K8a9rD/yrHfw0/Q5srfI6T1hK+isdb/S1H5K/yOa0+O62/gTQlsGr/GKjpLCTe7noxfdUvTv4bd/A6VOSoYhx6UN8M0+DWaOs6U7xTas2k7cLq9iLkPQAKLAAAAAAAAAAAAAAAAAAAAAAAAAAA03WdyTraQoUY0JU1OlVcnzspxi4OLUknGMne6j1cSPHqc0h+0wn9St/8SdQWi0wjSNtWmr7EYDE1K9epSd6LhCNOU5ZylGUnLbhG1thJWvvZJIBEztKx09gnXwuIoxsnWoVIJu9k5xcVeyeV3wIXep3SOXtMJ/Ur+nMk7AROkaQ3oLVNi6eJoTrzw7p06sJTjGdWUpKL2nFJ00mm1besmyZABM7IgABCQAAAAAAAAAAAAB//9k=' crossorigin='anonymous'/> -->
+</body>
+<!-- Place your code in the script tag below. You can also use an external .js file -->
+<script>
+  const img = document.getElementById('image');//html <body>내에있는 'image' ID 값에 해당하는 컴포넌트 가져옴
+
+
+
+  //console 창에 결과값 나타내는 함수
+  async function loadAndPredict() {
+    const net = await bodyPix.load(/** optional arguments, see below **/);//bodypix load 함수
+
+    /**
+     * One of (see documentation below):
+     *   - net.segmentPerson
+     *   - net.segmentPersonParts
+     *   - net.segmentMultiPerson
+     *   - net.segmentMultiPersonParts
+     * See documentation below for details on each method.
+     */
+    const segmentation = await net.segmentPersonParts(image, {
+      flipHorizontal: false,//사진의 가로 세로 설정
+      internalResolution: 'full',//
+      segmentationThreshold: 1
+    });
+    console.log(segmentation);
+  }
+
+  async function mask() {
+
+
+    const img = document.getElementById('image');
+
+    const net = await bodyPix.load({//bodypix load 함수 ( 매개변수로 조건 넣어둠 )
+      architecture: 'ResNet50',
+      outputStride: 32,
+      quantBytes: 4
+    });
+
+    //const partSegmentation = await net.segmentMultiPersonParts(img);
+
+    const partSegmentation = await net.segmentPersonParts(image, {
+      flipHorizontal: false,//사진의 가로 세로 설정
+      internalResolution: 'high',//
+      segmentationThreshold: 0.5
+    });
+
+    // The colored part image is an rgb image with a corresponding color from the
+    // rainbow colors for each part at each pixel, and black pixels where there is
+    // no part.
+
+    //html <body> 내의 'canvas' ID 값에 해당하는 컴포넌트 받아옴, 여기에 결과이미지 그리기 위함
+    const coloredPartImage = bodyPix.toColoredPartMask(partSegmentation);
+    const opacity = 0.7;
+    const flipHorizontal = false;
+    const maskBlurAmount = 0;
+    const canvas = document.getElementById('canvas');
+
+    // Draw the colored part image on top of the original image onto a canvas.
+    // The colored part image will be drawn semi-transparent, with an opacity of
+    // 0.7, allowing for the original image to be visible under.
+
+
+    //결과 이미지 그리는 함수
+    bodyPix.drawMask(
+      canvas, img, coloredPartImage, opacity, maskBlurAmount,
+      flipHorizontal);
+  }
+
+
+  loadAndPredict();
+  mask();
+</script>
+
+</html>
