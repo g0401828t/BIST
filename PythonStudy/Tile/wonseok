@@ -1,0 +1,57 @@
+import itertools
+import math
+
+def solution(n):
+    
+    answer = 0
+    
+    #n = 1*sero_num + 2*garo_num
+    
+    garo_num = n//2
+    
+    count = 0
+    
+    for i in range(garo_num+1):
+        print('i=',i)
+        #list_geung_u_eu_su =[]
+        garo_num = i
+        sero_num = n - (2*i)
+        #list_ab = []
+        
+        """for j in range(garo_num):
+            list_ab.append('garo')
+        for k in range(sero_num):
+            list_ab.append('sero')
+        #print('i=',i)
+        #print(list_ab)
+        list_= itertools.permutations(list_ab,len(list_ab))
+        list_nozoongbok = list(set(list_))
+        #print('list_nozoongbok=',list_nozoongbok)
+        #print(type(list_nozoongbok[0]))
+        #print('length_nozoongbok',len(list_nozoongbok))"""
+        
+        if sero_num == 0 or garo_num == 0:
+            count += 1
+            #print('count=',count)
+        else:#중복 조합으로 풀기
+            #(sero_num+1)H(garo_num)
+            #nHk = n+k-1Ck = {(n+k-1)!}/{k!(n-1)!}
+            joongbok_johab = (math.factorial(sero_num+garo_num))/((math.factorial(garo_num))*(math.factorial(sero_num)))
+            #print('jb=',joongbok_johab)
+            count = count + joongbok_johab
+            #print('count=',count)
+        
+    
+    answer = count%1000000007
+        
+        
+    
+    """chars = ['a','a','a']
+    print(type(chars))
+    
+    c = itertools.combinations(chars,len(chars))
+    print(list(c))"""
+    
+    #### 피보나치로 풀어야한다!!!!
+    
+    return answer
