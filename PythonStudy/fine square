@@ -1,0 +1,27 @@
+def solution(w,h):       
+    max_yaksu = min(h,w)
+    while True:
+        if h % max_yaksu == 0 and w % max_yaksu == 0:
+            print('max_yaksu = ',max_yaksu)
+            break
+        max_yaksu -= 1
+
+    h_yak = h / max_yaksu
+    w_yak = w / max_yaksu
+
+    """if h_yak == 1 or w_yak == 1:
+        small_cross = max(h_yak,w_yak)
+        total_cross = small_cross * max_yaksu
+        answer = w * h - total_cross
+    else:
+        small_cross = (max(h_yak,w_yak)//min(h_yak,w_yak) + 1) * min(h_yak,w_yak)
+        print('small_cross=',small_cross)
+        total_cross = small_cross * max_yaksu
+        print('total_cross=',total_cross)
+        answer = w * h - total_cross   """
+
+    small_cross = h_yak + w_yak - 1
+    total_cross = small_cross * max_yaksu
+    answer = w * h - total_cross
+
+    return answer
