@@ -1,0 +1,51 @@
+def solution(n, lost, reserve):
+    answer = 0
+    
+    for k in lost:
+        for j in reserve:
+            if k==j:
+                reserve.remove(j)
+                lost.remove(k)
+                
+    get1 = []
+    #get2 = []
+
+    lost1 = lost.copy()
+    #lost2 = lost.copy()
+    reserve1 = reserve.copy()
+    #reserve2 = reserve.copy()
+
+    for i in lost1:
+        front = i-1
+        back = i+1
+        if front in reserve1:
+            reserve1.remove(i-1)
+            get1.append(i)
+        elif back in reserve1:
+            reserve1.remove(i+1)
+            get1.append(i)
+    
+    answer1 = n - len(lost) + len(get1)        
+    
+    
+    """for j in lost2:
+        front = j-1
+        back = j+1
+        if back in reserve2:
+            reserve2.remove(j+1)
+            get2.append(j)
+        elif front in reserve2:
+            reserve2.remove(j-1)
+            get2.append(j)
+            
+    answer2 = n - len(lost) + len(get2)
+    
+    answer = max(answer1,answer2)"""
+        
+    print('answer=',answer)
+    
+    return answer1
+
+
+
+# 12개 중에 하나 틀린다..왜...
